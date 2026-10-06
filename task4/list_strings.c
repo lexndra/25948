@@ -5,10 +5,10 @@
 struct Node {
     char *data;
     struct Node *next;
-};
+};//структура узла с  массивом символов и указателем на первый байт
 
-void append(struct Node **head, const char *str)
-{
+void push_front(struct Node **head, const char *str)
+{//в конец
     struct Node *new_node = malloc(sizeof(struct Node));
     if (new_node == NULL) {
         perror("malloc node");
@@ -23,21 +23,13 @@ void append(struct Node **head, const char *str)
         exit(EXIT_FAILURE);
     }
     strcpy(new_node->data, str);
-    new_node->next = NULL;
 
-    if (*head == NULL) {
-        *head = new_node;
-        return;
-    }
+    new_node->next = *head;
+    *head = new_node;
 
-    struct Node *cur = *head;
-    while (cur->next != NULL) {
-        cur = cur->next;
-    }
-    cur->next = new_node;
 }
 
-void print_list(const struct Node *head)
+void print_list(const struct Node *head)//вывод
 {
     while (head != NULL) {
         printf("%s\n", head->data);
@@ -45,7 +37,7 @@ void print_list(const struct Node *head)
     }
 }
 
-void free_list(struct Node *head)
+void free_list(struct Node *head)//освобождение памяти
 {
     while (head != NULL) {
         struct Node *next = head->next;
@@ -63,7 +55,7 @@ int main(void)
     printf("Вводите строки. Для завершения введите строку, начинающуюся с '.'\n");
 
     while (1) {
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {//fgets кладёт каждую строку
             break; /* EOF */
         }
 
@@ -78,7 +70,7 @@ int main(void)
         }
 
         if (len > 0) {
-            append(&head, buffer);
+            push_front(&head, buffer);
         }
     }
 
